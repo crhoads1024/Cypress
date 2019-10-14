@@ -1,0 +1,22 @@
+{
+  "name": "qae_home_assignment_chris_rhoads",
+  "version": "1.0.0",
+  "description": "Rocketmiles Search and Endpoint Testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crhoads1024/Cypress.git"
+  },
+  "author": "Chris Rhoads",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crhoads1024/Cypress/issues"
+  },
+  "homepage": "https://github.com/crhoads1024/Cypress#readme",
+  "devDependencies": {
+    "cypress": "^3.4.1"
+  }
+}
