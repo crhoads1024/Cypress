@@ -65,7 +65,8 @@ const checkOut = dateEnd;
 // const env = Cypress.env(process.env);
 // console.log(env);
 describe('Tests the Search Functions Of Rocketmiles.com ', () => {
-
+ 
+    //Base query params for hotel search
     const langBase = 'en';
     const currencyBase = 'USD';
     const sssBase = 'rocketmiles';
@@ -128,17 +129,14 @@ describe('Tests the Search Functions Of Rocketmiles.com ', () => {
             method: 'GET',
             url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
         }).then(response => {
+            const hotelsFound = response.body.results;
+            const lastResultIndex = hotelsFound;
 
+        if(hotelsFound >= 0){ 
             //Response Variables
             const returnedId = response.body.placeResult.id.split('"');
             const returnedIdAsString = returnedId.toString();
-            const hotelsFound = response.body.results;
-            const lastResultIndex = hotelsFound;
-         
-            //Hotel Results Details
-            //const lowestAvgPriceCurrency = response.body.results[0].).to.eq();
-            //const targetIndex = array.findIndex(x => x.hotel.lowestAveragePrice.currency.to.not.eq(currencyBase));
-            //cy.log('Index found where USD is not used in lowest avg price is ' targetIndex);
+
             expect(response.status).to.eq(200);
             expect(response.body.rooms).to.eq(roomQtyBase);
             expect(response.body.id).to.not.eq(null);
@@ -161,7 +159,7 @@ describe('Tests the Search Functions Of Rocketmiles.com ', () => {
             expect(response.body.rewardProgram.maxReward).to.eq(100);
             expect(response.body.rewardProgram.minReward).to.eq(5);
             expect(response.body.results).to.eq(lastResultIndex);
-        if(hotelsFound >= 0){
+        
             expect(response.body.results[0].lowestAveragePrice.currency.to.eq(currencyBase));
             expect(response.body.results[0].lowestAveragePrice.symbol.to.eq(currencyBase));
             expect(response.body.results[0].lowestAverageTaxesAndFees.currency.to.eq(currencyBase));
