@@ -10,72 +10,60 @@
 const { floor } = Math;
 const { random } = Math;
 const today = new Date();
-const date = `${today.getFullYear()}%2F${today.getMonth()
-  + 1}%2F${today.getDate()}`;
-  const dateEnd = `${today.getFullYear()}%2F${today.getMonth()
-    + 1}%2F${today.getDate() + 4}`;
+const date = `${today.getMonth()
+  + 1}%2F${today.getDate()}%2F${today.getFullYear()}`;
+const dateEnd = `${today.getMonth()
+    + 1}%2F${today.getDate() + 2}%2F${today.getFullYear()}`;
 const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
 const dateTime = `${date} ${time}`;
 
-// function getRandomDestinaton()  {
-// cy.request({
-//     method: 'GET',
-//         url: `https://www.rocketmiles.com/rest/places?query=&language=${language}&sessionSiteSlug=${ssSlug}`,
-
-
-// }).then(response => {
-//     const array = response
-//     const arrayLength = response.lenght;
-//     const destinationList = [];
-//     const places = {array: destinationList};
-    
-//     cy.log(`Contents of Places ${places}`);
-//     randomDestination = randomDestinationSelector();
-//     cy.log(`Randomized Destination Selector is ${randomDestination}`);
-// )};
-// return randomDestination;
-// }
-
-
-
-
+const responseCheckOut =  `${today.getFullYear()}-${today.getMonth() +1}-${today.getDate() +2}`;
+const responseCheckIn = `${today.getFullYear()}-${today.getMonth() +1}-${today.getDate()}`;
 const rewardProgramList = [];
-const guestQty = [1,2,3];
-const roomQty = [];
-const currencyList = [];
+const guestQty = [1,2,3,4,5];
+const roomQty = [1,2,3];
+const currencyList = [
+    'currency': 'USD',
+    'usdSymbol': '&#36;'
+];      
 const langList = [];
 const checkIn = date 
 const checkOut = dateEnd;
 
-function randomRewardSelector() {
-const program = `${rewardProgramList[floor(random() * rewardProgramList.length)]}`;
-return `${program}`;
-}
+// function randomRewardSelector() {
+// const program = `${rewardProgramList[floor(random() * rewardProgramList.length)]}`;
+// return `${program}`;
+// }
 
 
 
-function randomCurrencySelector() {
-const currency = `${rewardProgramList[floor(random() * rewardProgramList.length)]}`;
-return `${currency}`;
-}
+// function randomCurrencySelector() {
+// const currency = `${rewardProgramList[floor(random() * rewardProgramList.length)]}`;
+// return `${currency}`;
+// }
 
-function randomLanguageSelector() {
-const language = `${langList[floor(random() * langList.length)]}`;
-return `${language}`;
-}
+// function randomLanguageSelector() {
+// const language = `${langList[floor(random() * langList.length)]}`;
+// return `${language}`;
+// }
 
-function randomGuestQtySelector() {
-const guestQty = `${guestQty[floor(random() * guestQty.length)]}`;
-return `${guestQty}`;
-}
+// function randomGuestQtySelector() {
+// const guestQty = `${guestQty[floor(random() * guestQty.length)]}`;
+// return `${guestQty}`;
+// }
 
-function randomRoomQtySelector() {
-const roomQty = `${roomQty[floor(random() * roomQty.length)]}`;
-return `${roomQty}`;
-}
+// function randomRoomQtySelector() {
+// const roomQty = `${roomQty[floor(random() * roomQty.length)]}`;
+// return `${roomQty}`;
+// }
 
-const env = Cypress.env(process.env);
-console.log(env);
+//  function randomDestinationSelector() {
+//  const randomDestIndex = `${destId[floor(random() * array.length)]}`;
+//  return `${randomDestIndex}`;
+//  }
+
+// const env = Cypress.env(process.env);
+// console.log(env);
 describe('Tests the Search Functions Of Rocketmiles.com ', () => {
 
     const langBase = 'en';
@@ -91,69 +79,98 @@ describe('Tests the Search Functions Of Rocketmiles.com ', () => {
     const inclPromoBase = true;
     const srcBase = 'HSS';
     const statContLvlBase = 'SEARCH';
-    const rewardProgBase = 'amazon';            
-    const queryBaseDest = 'Chicago,+IL';
-    const latBase = '41.8958';
-    const longBase = '-87.6253';
-    const placeIdBase = 77;           
-                
-                
+    const rewardProgBase = 'amazon'; 
+    const destNameBase = 'Chicago';           
+    const queryBaseDesc = 'Chicago,+IL';
+    const latBase = 41.8958;
+    const longBase = -87.6253;
+    const placeIdBase = 77; 
+    const stateAbbrevSplit = queryBaseDesc.split(',+');
+    const stateAbbrev = stateAbbrevSplit[1];
+    const description = queryBaseDesc.split('+');
+    const descriptionSplit = description[0]+ ' '+description[1];
+    
                
                
-   // beforeAll(() => populateSearchSelectors());
-    it('Gets the list of top destinations.', () => {
+               
+               
+  
+    it('Builds list of currency options from UI.', () => {
     cy.request({
         method: 'GET',
-            url: `${env}/rest/places?query=&language=${langBase}&sessionSiteSlug=${sssBase}`
+            url: `rest/places?query=&language=${langBase}&sessionSiteSlug=${sssBase}`
     
     }).then(response => {
-        const array = response
-        const arrayLength = response.lenght;
-        const destinationList = [];
-        const places = {array: destinationList};
+        const array = response.body;
+        const arrayMax = array.length;
+        cy.log(`Array Length is ${arrayMax}`);
+
+        //  *** Random Index Selection ***
+        const selectionIndex = Math.floor(Math.random() * Math.floor(arrayMax));
+        cy.log(`The Randomly Chosen Destination Index From Places Returned Is ${selectionIndex}`);
+        const randomIndexId = response.body[selectionIndex].id;
+        const randomIndexName = response.body[selectionIndex].name;
+        const randomIndexDesc = response.body[selectionIndex].description;
+        const randomIndexSrc = response.body[selectionIndex].source;
+        const randomIndexType = response.body[selectionIndex].type;
+        /// *** Random Index Selection Data Print Out ***
+        cy.log(`Randomly Selected Dest Index ID is ${randomIndexId}`);
+        cy.log(`Randomly Selected Dest Index Name is ${randomIndexName}`);
+        cy.log(`Randomly Selected Dest Index Descripton is ${randomIndexDesc}`);
+        cy.log(`Randomly Selected Dest Index Source is ${randomIndexSrc}`);
+        cy.log(`Randomly Selected Dest Index Type is ${randomIndexType}`);
+        //  *** Random Index Selection ***
         
-        cy.log(`Contents of Places ${places}`);
-        randomDestination = randomDestinationSelector();
-        cy.log(`Randomized Destination Selector is ${randomDestination}`);
-       
     });
 });
-    it('Tests the Search Feature Wiith Defaults.', () => {
-        
-
+    it('Tests the Search Feature With Defaults Via API.', () => {
         cy.request({
             method: 'GET',
-            url: `${env}rest/search?
-                adults=${guestQtyBase}
-                &${checkInBase}
-                &${checkOutBase}
-                &currency=${currencyBase}
-                &hotelImageHeight=${imgHBase}
-                &hotelImageWidth=${imgWBase}
-                &includeAffiliateResults=${inclAffilBase}
-                &includePromoIneligible=${inclPromoBase}
-                &language=${langBase}
-                &latitude=${latBase}
-                &longitude=${longBase}
-                &placeId=${placeIdBase}
-                &program=${rewardProgBase}
-                &query=${queryBaseDest}
-                &rooms=${roomQtyBase}
-                &sessionSiteSlug=${sssBase}
-                &source=${srcBase}
-                &staticContentLevel=${statContLvlBase}`
-    }).then(response => {
-        const array = response
-        const arrayLength = response.lenght;
-        const destinationList = [];
-        const places = {array: destinationList};
-        
-        cy.log(`Contents of Places ${places}`);
+            url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+        }).then(response => {
+
+            //Response Variables
+            const returnedId = response.body.placeResult.id.split('"');
+            const returnedIdAsString = returnedId.toString();
+            const hotelsFound = response.body.results;
+            const lastResultIndex = hotelsFound;
+         
+            //Hotel Results Details
+            //const lowestAvgPriceCurrency = response.body.results[0].).to.eq();
+            //const targetIndex = array.findIndex(x => x.hotel.lowestAveragePrice.currency.to.not.eq(currencyBase));
+            //cy.log('Index found where USD is not used in lowest avg price is ' targetIndex);
+            expect(response.status).to.eq(200);
+            expect(response.body.rooms).to.eq(roomQtyBase);
+            expect(response.body.id).to.not.eq(null);
+            expect(response.body.placeResult.country).to.eq(null);
+            expect(response.body.placeResult.description).to.eq(descriptionSplit);
+            expect(response.body.placeResult.id).to.eq(returnedIdAsString);
+            expect(response.body.placeResult.latitude).to.eq(latBase);
+            expect(response.body.placeResult.longitude).to.eq(longBase);
+            expect(response.body.placeResult.name).to.eq(destNameBase);
+            expect(response.body.placeResult.placeType).to.eq('REGION');
+            expect(response.body.placeResult.source).to.eq(srcBase);
+            expect(response.body.placeResult.state).to.eq(stateAbbrev);
+            expect(response.body.checkInDate).to.eq(responseCheckIn);
+            expect(response.body.checkOutDate).to.eq(responseCheckOut);
+            //expect(response.body.results).includes(searchResultsReturned);
+            expect(response.body.rewardProgram.disabled).to.eq(false);
+            expect(response.body.rewardProgram.unitsLong).to.eq("Amazon.com Gift Card");
+            expect(response.body.rewardProgram.unitsShort).to.eq("Gift Card");
+            expect(response.body.rewardProgram.id).to.eq(rewardProgBase);
+            expect(response.body.rewardProgram.maxReward).to.eq(100);
+            expect(response.body.rewardProgram.minReward).to.eq(5);
+            expect(response.body.results).to.eq(lastResultIndex);
+        if(hotelsFound >= 0){
+            expect(response.body.results[0].lowestAveragePrice.currency.to.eq(currencyBase));
+            expect(response.body.results[0].lowestAveragePrice.symbol.to.eq(currencyBase));
+            expect(response.body.results[0].lowestAverageTaxesAndFees.currency.to.eq(currencyBase));
+
+        }
+
 
         });
-
     });
-
 }); 
     
     
