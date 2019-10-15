@@ -16,8 +16,8 @@ module.exports = (on, config) => {
   // `config` is the resolved Cypress config
 
 return Object.assign({}, config, {
-    
     integrationFolder: 'test/specs',
     screenshotsFolder: 'test/screenshots',
+    baseUrl: 'https://www.rocketmiles.com/'
   });
 };
