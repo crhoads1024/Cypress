@@ -18,20 +18,12 @@ To install:
  - type 
  "npm i"
  
+  - type 
+ "npm install cypress"
+
 To run:
  - type 
  "npm test"
  - From the Cypress test runner you can run the integration test file by clicking individually or click "Run all specs"
  
 
-COMPLETED:
-Test 1 - Positive Test Wth Following Parameters
-Guest == 2
-Room == 1
-Stay Duration = 2 days
-Language == English
-Currency == USD
-Long/Lat == 
-
-
-Test 2 - Negative Test
