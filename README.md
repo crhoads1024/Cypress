@@ -22,7 +22,8 @@ To install:
  "npm install cypress"
 
 To run:
- - change diretory to 'Cypress' folder
+ - change diretory to 'Cypress' git project folder
+ - type "npm i cypress"
  - type 
  "npm test"
  - From the Cypress test runner you can run the integration test file by clicking individually or click "Run all specs"
