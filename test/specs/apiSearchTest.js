@@ -1,190 +1,399 @@
 
 
-// API Target Site: Rocketmiles.com
-// Search Funtion
-// Positive Tests
-// Negative Tests
-// Selection Lists
+//  API Target Site: Rocketmiles.com //
+//  ***Search Function Validation***
+//  ******* POSITIVE TESTS *******   //
 
-
-const { floor } = Math;
+const { floor }  = Math;
 const { random } = Math;
-const today = new Date();
-const date = `${today.getMonth()
+const today      = new Date();
+const date       = `${today.getMonth()
   + 1}%2F${today.getDate()}%2F${today.getFullYear()}`;
-const dateEnd = `${today.getMonth()
+const dateEnd    = `${today.getMonth()
     + 1}%2F${today.getDate() + 2}%2F${today.getFullYear()}`;
-const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-const dateTime = `${date} ${time}`;
+const time       = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+const dateTime   = `${date} ${time}`;
 
-const responseCheckOut =  `${today.getFullYear()}-${today.getMonth() +1}-${today.getDate() +2}`;
-const responseCheckIn = `${today.getFullYear()}-${today.getMonth() +1}-${today.getDate()}`;
+const responseCheckOut  =  `${today.getFullYear()}-${today.getMonth() +1}-${today.getDate() +2}`;
+const responseCheckIn   = `${today.getFullYear()}-${today.getMonth() +1}-${today.getDate()}`;
+const topDestList       = [];
 const rewardProgramList = [];
-const guestQty = [1,2,3,4,5];
-const roomQty = [1,2,3];
-const currencyList = [
-    'currency': 'USD',
-    'usdSymbol': '&#36;'
-];      
-const langList = [];
-const checkIn = date 
-const checkOut = dateEnd;
-
-// function randomRewardSelector() {
-// const program = `${rewardProgramList[floor(random() * rewardProgramList.length)]}`;
-// return `${program}`;
-// }
+const guestQty          = [1,2,3,4,5];
+const roomQty           = [1,2,3];
+const currencyList      = [];     
+const langList          = [];
+const checkIn           = date 
+const checkOut          = dateEnd;
 
 
+// const randInputCurr    = currencyList[floor(random() * currencyList.length)];
+// const randTestRewProg  = rewardProgramList[floor(random() * randTestRewProg.length)];
+// const randTestLang     = langList[floor(random() * langList.length)];
+// const randTestDest     = topDestList[floor(random() * topDestList.length)];
+// const randTestGuestQty = guestQty[floor(random() * guestQty.length)];
+// const randTestRoomQty  = roomQty[floor(random() * roomQty.length)];
+// const randTestCheckIn  = checkIn[floor(random() * checkIn.length)];
+// const randTestCheckOut = checkOut[floor(random() * checkOut.length)];
 
-// function randomCurrencySelector() {
-// const currency = `${rewardProgramList[floor(random() * rewardProgramList.length)]}`;
-// return `${currency}`;
-// }
 
-// function randomLanguageSelector() {
-// const language = `${langList[floor(random() * langList.length)]}`;
-// return `${language}`;
-// }
 
-// function randomGuestQtySelector() {
-// const guestQty = `${guestQty[floor(random() * guestQty.length)]}`;
-// return `${guestQty}`;
-// }
-
-// function randomRoomQtySelector() {
-// const roomQty = `${roomQty[floor(random() * roomQty.length)]}`;
-// return `${roomQty}`;
-// }
-
-//  function randomDestinationSelector() {
-//  const randomDestIndex = `${destId[floor(random() * array.length)]}`;
-//  return `${randomDestIndex}`;
-//  }
-
-// const env = Cypress.env(process.env);
-// console.log(env);
 describe('Tests the Search Functions Of Rocketmiles.com ', () => {
- 
+   
+
+
+   
     //Base query params for hotel search
-    const langBase = 'en';
-    const currencyBase = 'USD';
-    const sssBase = 'rocketmiles';
-    const guestQtyBase = 2;
-    const roomQtyBase = 1;
-    const checkInBase = date;
-    const checkOutBase = checkOut;
-    const imgHBase = 507;
-    const imgWBase = 760;           
-    const inclAffilBase = true;
-    const inclPromoBase = true;
-    const srcBase = 'HSS';
-    const statContLvlBase = 'SEARCH';
-    const rewardProgBase = 'amazon'; 
-    const destNameBase = 'Chicago';           
-    const queryBaseDesc = 'Chicago,+IL';
-    const latBase = 41.8958;
-    const longBase = -87.6253;
-    const placeIdBase = 77; 
+    const langBase         = 'en';
+    const currencyBase     = "USD";
+    const sssBase          = 'rocketmiles';
+    const guestQtyBase     = 2;
+    const roomQtyBase      = 1;
+    const checkInBase      = date;
+    const checkOutBase     = checkOut;
+    const imgHBase         = 507;
+    const imgWBase         = 760;           
+    const inclAffilBase    = true;
+    const inclPromoBase    = true;
+    const srcBase          = 'HSS';
+    const statContLvlBase  = 'SEARCH';
+    const rewardProgBase   = 'amazon'; 
+    const destNameBase     = 'Chicago';           
+    const queryBaseDesc    = 'Chicago,+IL';
+    const latBase          = 41.8958;
+    const longBase         = -87.6253;
+    const placeIdBase      = 77; 
     const stateAbbrevSplit = queryBaseDesc.split(',+');
-    const stateAbbrev = stateAbbrevSplit[1];
-    const description = queryBaseDesc.split('+');
+    const stateAbbrev      = stateAbbrevSplit[1];
+    const description      = queryBaseDesc.split('+');
     const descriptionSplit = description[0]+ ' '+description[1];
+    let currencyLength     = null ;
     
-               
                
                
                
   
-    it('Builds list of currency options from UI.', () => {
-    cy.request({
-        method: 'GET',
-            url: `rest/places?query=&language=${langBase}&sessionSiteSlug=${sssBase}`
-    
-    }).then(response => {
-        const array = response.body;
-        const arrayMax = array.length;
-        cy.log(`Array Length is ${arrayMax}`);
 
-        //  *** Random Index Selection ***
-        const selectionIndex = Math.floor(Math.random() * Math.floor(arrayMax));
-        cy.log(`The Randomly Chosen Destination Index From Places Returned Is ${selectionIndex}`);
-        const randomIndexId = response.body[selectionIndex].id;
-        const randomIndexName = response.body[selectionIndex].name;
-        const randomIndexDesc = response.body[selectionIndex].description;
-        const randomIndexSrc = response.body[selectionIndex].source;
-        const randomIndexType = response.body[selectionIndex].type;
-        /// *** Random Index Selection Data Print Out ***
-        cy.log(`Randomly Selected Dest Index ID is ${randomIndexId}`);
-        cy.log(`Randomly Selected Dest Index Name is ${randomIndexName}`);
-        cy.log(`Randomly Selected Dest Index Descripton is ${randomIndexDesc}`);
-        cy.log(`Randomly Selected Dest Index Source is ${randomIndexSrc}`);
-        cy.log(`Randomly Selected Dest Index Type is ${randomIndexType}`);
-        //  *** Random Index Selection ***
+    
+// it('Builds list of currency options from UI.', () => {
+//    cy.visit();   
+//     cy.get('tbody>tr').each((_$entry, _myidx, $array) => {
+//      expect($array).to.contain('delete');
+//      expect($array).to.contain('share');
+//      expect($array).to.contain('file_copy');
+//      expect($array).to.contain('edit');
+//    });
+//  });
+// it('Grabs list of top destinations.', () => {
+//     cy.request({
+//         method: 'GET',
+//         url: `https://www.rocketmiles.com/rest/places?query=&language=en&sessionSiteSlug=rocketmiles`
+//     }).then(response => {
+//         expect(response.status).to.eq(200);
+//     });
+// });
+
+// it('Gets and loads the data for test currencies.', () => {
+//     cy.visit('https://www.rocketmiles.com'); 
+//     cy.server();
+//     cy.route('POST', '/api/lib/kD8MxMdJKmVcq/s', {}).as('onPageLoad');
+
+//     cy.wait('@onPageLoad');
+
+//     cy.get('button[class="btn cookie-banner-button ng-scope"]')
+//       .contains('OK')
+//       .click({ force: true });
+//     cy.get('span[aria-hidden="true"]')
+//     .click({force: true});
+
+//     // Loop and Load The Test Currencies From UI
+    // cy.get('a[class="ng-binding"]').each(($entry, myidx, $array) => {
+    //     cy.log(`${$entry[0].outerText}`);
+    //     currencyList.push($entry[0].outerText);
+       
+    //     currencyLength = $array.length;
+    //         expect(currencyLength).to.not.eq(null);
+    //  })
+
+// });
+//     it('Stalls long enough for loop to finish before evaluting length od EDArrray', () => {
+//         const currencyListLast = currencyList.lastIndexOf('UAH');
         
-    });
-});
-    it('Tests the Search Feature With Defaults Via API.', () => {
+//         if(currencyLength != null ){
+//               cy.log(currencyLength);
+//               cy.log(currencyList);
+//               cy.log(currencyLength);
+//               cy.log(currencyList[51]);
+//               cy.log(currencyListLast);
+//          }else{
+//               cy.log('No data to retrieve from currency array.')
+//           }
+//     });    
+        
+
+
+// it('Gets and Loads the test data for rewards programs.',() => {
+//     cy.request({
+//         method: 'GET',
+//         url: 'https://www.rocketmiles.com/rest/rewardPrograms?language=en&max=1000&sessionSiteSlug=rocketmiles'
+//     }).then(response => {
+//         expect(response.status).to.eq(200);
+//         const result = response.body;
+//         // result.each(($entry, myidx, $Edarray) => {
+            
+        
+//         // })
+//     })
+   
+//  });
+// it('Tests the Search Feature With Defaults Via API, Validates basic function of API .', () => {
+//         cy.request({
+//             method: 'GET',
+//             url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+//         }).then(response => {
+//             expect(response.status).to.eq(200);
+            
+        
+//         });
+        
+//    });
+
+//    it('Tests the Search Feature With Defaults Via API, Validates the placesResults.', () => {
+//     cy.request({
+//         method: 'GET',
+//         url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+//     }).then(response => {
+//         // Broke out all postive assertions into their own IT sections to more easily be able to apply negative tests
+       
+//         const returnedId         = response.body.placeResult.id.split('"');
+//         const returnedIdAsString = returnedId.toString();           
+//         expect(response.status).to.eq(200);
+//         expect(response.body.placeResult.country).to.eq(null);
+//         expect(response.body.placeResult.description).to.eq(descriptionSplit);
+//         expect(response.body.placeResult.id).to.eq(returnedIdAsString);
+//         expect(response.body.placeResult.latitude).to.eq(latBase);
+//         expect(response.body.placeResult.longitude).to.eq(longBase);
+//         expect(response.body.placeResult.name).to.eq(destNameBase);
+//         expect(response.body.placeResult.placeType).to.eq('REGION');
+//         expect(response.body.placeResult.source).to.eq(srcBase);
+//         expect(response.body.placeResult.state).to.eq(stateAbbrev);
+//         });
+//     });
+
+//     it('Tests the Search Feature With Defaults Via API, Validates returned roomQty match the input.', () => {
+//         cy.request({
+//             method: 'GET',
+//             url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+//         }).then(response => {
+//             const hotelsFound     = response.body.results;
+//             const lastResultIndex = hotelsFound;
+            
+//             expect(response.status).to.eq(200);
+//             expect(response.body.rooms).to.eq(roomQtyBase);
+//             expect(response.body.id).to.not.eq(null);
+
+//             //GETs Validates the number of hotels returned.
+//             expect(response.body.results).to.eq(lastResultIndex);
+//         });
+//     });
+
+//     it('Tests the Search Feature With Defaults Via API, Validates checkIn checkOut response match the input  .', () => {
+//         cy.request({
+//             method: 'GET',
+//             url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+//         }).then(response => {
+//             expect(response.status).to.eq(200);
+//             expect(response.body.checkInDate).to.eq(responseCheckIn);
+//             expect(response.body.checkOutDate).to.eq(responseCheckOut);
+//         });
+//     });
+
+//     it('Tests the Search Feature With Defaults Via API, Validates rewardProgram data.', () => {
+//         cy.request({
+//             method: 'GET',
+//             url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+//         }).then(response => {
+//             expect(response.status).to.eq(200);
+//             expect(response.body.rewardProgram.disabled).to.eq(false);
+//             expect(response.body.rewardProgram.unitsLong).to.eq("Amazon.com Gift Card");
+//             expect(response.body.rewardProgram.unitsShort).to.eq("Gift Card");
+//             expect(response.body.rewardProgram.id).to.eq(rewardProgBase);
+//             expect(response.body.rewardProgram.maxReward).to.eq(100);
+//             expect(response.body.rewardProgram.minReward).to.eq(5);
+//         });
+//     });
+
+    // it('Tests the Search Feature With Defaults Via API, Validates returned currency matches the input currency.', () => {
+    //     cy.request({
+    //         method: 'GET',
+    //         url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
+    //     }).then(response => {
+    //         const hotelsFound     = response.body.results;
+    //         const returnedResults = hotelsFound.length;
+    //         // Validate output has matching currency of input
+    //         cy.log('Validating Hotel Currency Results Match Input.');  
+    //         expect(response.status).to.eq(200);
+            
+            
+    //         // If hotel results are returned the code will continue to assert the accuracy of the pertinant values
+    //             if(returnedResults >= 0){ 
+    //                 cy.log(`There were ${returnedResults} hotels returned for the search parameters entered`);
+    //                     // This set of currency assertions are set such that they will be validated for each hotel result returned.
+    //                     let i = null;
+    //                     for(i = 0; i < returnedResults; i += 1){
+    //                         expect(response.body.results[i].totalPriceUSD.currency).to.eq(currencyBase);
+    //                         expect(response.body.results[i].totalPrice.currency).to.eq(currencyBase);
+    //                         expect(response.body.results[i].totalTaxesAndFees.currency).to.eq(currencyBase);
+    //                         expect(response.body.results[i].lowestAveragePrice.currency).to.eq(currencyBase);
+    //                         expect(response.body.results[i].lowestAverageTaxesAndFees.currency).to.eq(currencyBase);
+                            
+    //                     }
+    //             }else{
+    //                 cy.log('There are no hotels returned for the search parameters entered');
+    //             }
+    //     })  
+            
+    // });
+
+    it('Tests the Search Feature With Defaults Via API, Validates Pertinent Details Of Each Hotel Found.', () => {
         cy.request({
             method: 'GET',
             url: `rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}&hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}&includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}&placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}&source=${srcBase}&staticContentLevel=${statContLvlBase}`
         }).then(response => {
-            const hotelsFound = response.body.results;
-            const lastResultIndex = hotelsFound;
-
-        if(hotelsFound >= 0){ 
-            //Response Variables
-            const returnedId = response.body.placeResult.id.split('"');
-            const returnedIdAsString = returnedId.toString();
-
             expect(response.status).to.eq(200);
-            expect(response.body.rooms).to.eq(roomQtyBase);
-            expect(response.body.id).to.not.eq(null);
-            expect(response.body.placeResult.country).to.eq(null);
-            expect(response.body.placeResult.description).to.eq(descriptionSplit);
-            expect(response.body.placeResult.id).to.eq(returnedIdAsString);
-            expect(response.body.placeResult.latitude).to.eq(latBase);
-            expect(response.body.placeResult.longitude).to.eq(longBase);
-            expect(response.body.placeResult.name).to.eq(destNameBase);
-            expect(response.body.placeResult.placeType).to.eq('REGION');
-            expect(response.body.placeResult.source).to.eq(srcBase);
-            expect(response.body.placeResult.state).to.eq(stateAbbrev);
-            expect(response.body.checkInDate).to.eq(responseCheckIn);
-            expect(response.body.checkOutDate).to.eq(responseCheckOut);
-            //expect(response.body.results).includes(searchResultsReturned);
-            expect(response.body.rewardProgram.disabled).to.eq(false);
-            expect(response.body.rewardProgram.unitsLong).to.eq("Amazon.com Gift Card");
-            expect(response.body.rewardProgram.unitsShort).to.eq("Gift Card");
-            expect(response.body.rewardProgram.id).to.eq(rewardProgBase);
-            expect(response.body.rewardProgram.maxReward).to.eq(100);
-            expect(response.body.rewardProgram.minReward).to.eq(5);
-            expect(response.body.results).to.eq(lastResultIndex);
-        
-            expect(response.body.results[0].lowestAveragePrice.currency.to.eq(currencyBase));
-            expect(response.body.results[0].lowestAveragePrice.symbol.to.eq(currencyBase));
-            expect(response.body.results[0].lowestAverageTaxesAndFees.currency.to.eq(currencyBase));
-
-        }
+            const hotelsFound     = response.body.results;
+            const returnedResults = hotelsFound.length;
+              
+            
+            // If hotel results are returned the code will continue to assert the accuracy of the pertinant values
+            if(returnedResults >= 0){ 
+                
+                // This set of variables are set such that they will be validated for each result returned.
+                let i = null;
+                for(i = 0; i < returnedResults; i += 1){
+                    const hotelName            = response.body.results[i].hotel.name;
+                    const hotelIdNum           = response.body.results[i].hotel.id;
+                    const affiliate            = response.body.results[i].hotel.affiliates;
+                    const affiliatesIndex      = response.body.results[i].hotel.affiliates.length;
+                    const nightsBooked         = response.body.results[i].numberOfNights;
+                    const totalPriceUsdAmt     = response.body.results[i].totalPriceUSD.amount;  
+                    const totalPriceAmt        = response.body.results[i].totalPrice.amount;
+                    const totalTaxesAndFeesAmt = response.body.results[i].totalTaxesAndFees.amount;
+                    const lowAvgPriceAmt       = response.body.results[i].lowestAveragePrice.amount;
+                    const lowAvgTaxAndFeesAmt  = response.body.results[i].lowestAverageTaxesAndFees.amount;
+                    
 
 
-        });
-    });
-}); 
-    
-    
-    
-    // it('Fires GET /rewardsPrograms?language=&max&sessionsSiteSlug=rocketmiles', () => {
-    //   cy.request({
-    //     method: 'GET',
-    //     url: `${env}/categories/${clientID}`,
-    //     headers: {
-    //       'x-auth-token':
-    //         'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiYTg3Yzg1MC02Y2ZjLTExZTktYjVhNS1jM2EyMWI2NWU1NTkiLCJlbWFpbCI6ImRhdmlkLmhheWVzQHFzcnNvZnQuY29tIiwiZmlyc3RfbmFtZSI6IkRhdmlkIiwibGFzdF9uYW1lIjoiSGF5ZXMiLCJmdWxsX25hbWUiOiJEYXZpZCBIYXllcyIsInBvcnRhbF91c2VyIjp0cnVlLCJkb3Rjb21tX3VzZXIiOnRydWUsInFzcl91c2VyX2lkIjoiZGhheWVzNCIsImRvdGNvbW1fYWRtaW4iOnRydWUsInNlY3VyaXR5X2FjY2VzcyI6ZmFsc2UsInFzcl9zdG9yZXMiOltdLCJxc3JfcGF0Y2hlcyI6W10sInFzcl90aW1lc2xpY2VzIjpbeyJ2YWx1ZSI6IjAwOjAwLTA0OjAwIiwiZGlzcGxheSI6Ik92ZXJuaWdodCAoMTJhbSAtIDRhbSkifSx7InZhbHVlIjoiMDQ6MDAtMTE6MDAiLCJkaXNwbGF5IjoiQnJlYWtmYXN0ICg0YW0gLSAxMWFtKSJ9LHsidmFsdWUiOiIxMTowMC0xNDowMCIsImRpc3BsYXkiOiJMdW5jaCAoMTFhbSAtIDJwbSkifSx7InZhbHVlIjoiMTQ6MDAtMTc6MDAiLCJkaXNwbGF5IjoiU25hY2sgKDJwbSAtIDVwbSkifSx7InZhbHVlIjoiMTc6MDAtMjA6MDAiLCJkaXNwbGF5IjoiRGlubmVyICg1cG0gLSA4cG0pIn0seyJ2YWx1ZSI6IjIwOjAwLTI0OjAwIiwiZGlzcGxheSI6IkxhdGUgTmlnaHQgKDhwbSAtIDEyYW0pIn1dLCJpYXQiOjE1NTY4MTY4MzJ9.QQFkhpgzmfgEK2hwi1kAH7t6oKbDJYbnljDEm_zI278',
-    //     },
-    //   }).then(response => {
-    //     expect(response.body).to.have.property('Categories');
-    //     expect(response.body.Categories).not.eq(null);
-    //   });
-    
+                    cy.log('Validating Hotel Name, City, Time Zone Results Match Input.');
+                    
+                    expect(response.body.results[i].hotel.name).to.not.eq(null); 
+                    expect(response.body.results[i].hotel.id).to.not.eq(null);
+                    expect(response.body.results[i].hotel.address.timeZone).to.includes(destNameBase);
+                    expect(response.body.results[i].hotel.address.city).to.not.eq(null);
+
+                    cy.log('Validating price and tax quotes are returned by the API to be calculated for total price.');
+                    expect(lowAvgPriceAmt).to.not.eq(null);
+                    expect(lowAvgTaxAndFeesAmt).to.not.eq(null);
+                    expect(nightsBooked).to.not.eq(null);
+                   
+                    // *** This section decides how, which way to assert the return values of the 
+                    // *** 'lowAvgTaxesAndFees' should be calculated and compared.
+                    // *** Taxes and fees value is returned by the API as only 2 decimal places
+                    // *** However, some totalTaxFees calculations are truly using fractions of cents to arrive
+                    // *** at the total calculation.
+                    
+                    //*** Actual Low Avg Tax And Fees is obtained by reverse calculating the totalLowAvgTaxAndFeesAmt
+                    //*** Taking the value the API returns in totalTaxesAndFees and dividiing it by the 
+                    //*** number of nights for the booking will give the full NON-ROUNDED value of lowAvgTaxAndFeesAmt 
+                    
+                    // calculates actual values not represented in lowest listed priced (put this in a function at some point)
+                    //const actualLowPriceAmtUSD      = lowAvgPriceAmtUSD / nightsBooked;
+
+                    const actualLowPriceAmtUSD      = lowAvgPriceAmt/nightsBooked;
+                    const actualLowAvgTaxAndFeeAmt  = totalTaxesAndFeesAmt/nightsBooked;
+
+                    // Calculates actual value of foreign currency whole decimals or fractional cents and pulls the *** (forCurConvPriceAmt) ***
+                    // actualLowPriceAmtConverted = currencyConvert();
+                    // Splits and counts the decimal length of the actual prices
+                    // const actualLowPriceAmtConvertedSplit = actualLowPriceAmtConverted.toString().split('.');
+                    // const actualLowPriceAmtConvertedLength = actualLowPriceAmtConvertedlngthSplit[1].length;
+
+                    const actualLowPriceAmtUSDSplit = actualLowPriceAmtUSD.toString().split('.');
+                    const actualLowPriceAmtUSDlngth = actualLowPriceAmtUSDSplit[1].length;
+
+                    const taxAndFeesSplitLngth      = actualLowAvgTaxAndFeeAmt.toString().split('.');
+                    const taxAndFeesDecLngth        = taxAndFeesSplitLngth[1].length;
+
+
+                    // const currencyConvert = () => {
+
+                    //     forNCurrXchangeRate  = totalPriceAmt / totalPriceUsdAmt;
+                    //     actualLowPriceAmtConverted = forNCurrXchangeRate / nightsBooked;
+
+                    //     return actualLowPriceAmtConverted;
+                    // }
+
+
+                    
+                    cy.log(`Actual Low Average Tax And Fee Amount Is ${actualLowAvgTaxAndFeeAmt}`);
+                    // || actualLowPriceAmtConvertedlngth
+                
+                if(taxAndFeesDecLngth || actualLowPriceAmtUSDlngth > 2){
+                    cy.log(`Validating taxes and price quoted are calulated accureately for ${hotelName} with ${currencyBase} 
+                    + for room quantity of ${roomQtyBase} booked for ${nightsBooked} nights with ${guestQtyBase} adults on search.`);
+                        expect(totalPriceUsdAmt).to.eq(actualLowPriceAmtUSD * nightsBooked);
+                        expect(totalTaxesAndFeesAmt).to.eq(actualLowAvgTaxAndFeeAmt * nightsBooked);
+                    
+                } 
+                else{
+                    
+                    //*** This Block Executes For The lowAvgTaxAndFeesAmt values that contain WHOLE CENT VALUES */
+                    
+                    cy.log(`Validating taxes and price quoted are calulated accureately for ${hotelName} with ${currencyBase} 
+                    + for room quantity of ${roomQtyBase} booked for ${nightsBooked} nights with ${guestQtyBase} adults on search.`);
+                    expect(totalPriceUsdAmt).to.eq(lowAvgPriceAmt * nightsBooked);
+                    expect(totalPriceAmt).to.eq(lowAvgPriceAmt * nightsBooked); // lowAvgPriceAmt is the only thing that shows a foreign currencies value
+                    expect(totalTaxesAndFeesAmt).to.eq(lowAvgTaxAndFeesAmt * nightsBooked);
+                    
+                    }                  
+                    // Exposing the affiliate(s) info
+                    if (affiliatesIndex >= 1 ){
+                            let a = null;
+                                for(a = 0; a < affiliatesIndex; a += 1){
+                                    const affiliateSite = affiliate[a].url;
+                                    const affiliateSlug = affiliate[a].slug;
+                                    cy.log(`Afilliate Slug For ${hotelName} and Index[${i}] valiidated is ${affiliateSlug}`);
+                                    cy.log(`Afilliate Website For ${hotelName} and Index[${i}] valiidated is ${affiliateSite}`);
+
+                                    expect(affiliateSlug && affiliateSite).to.includes(`booking`);
+                                }
+                    }else{
+                            cy.log('No Affiliates Listed For Property.')
+                        }
+                        // Once currency conversion rates are accurately establiished
+                    // THIS WILL NEED (totalPriceAmt).to.eq(lowAvgPriceAmt * nightsBooked * conversionCalc); multiplied by the conversion rate to the USD
+                    // 'totalPriceUSD' always shows the USD amt 
+                
+                
+                } //For loop
+                        
+            } //main If()
+        }) //THEN
+          
+    }); //IT Test  
+                    
+}); //Describe Test Sute
+
+
+    // it('Tests the Search Feature With Defaults Via API, Validates  .', () => {
+    //     cy.request({
+    //         method: 'GET',
+    //         url: `
+            // + rest/search?adults=${guestQtyBase}&checkIn=${checkInBase}&checkOut=${checkOutBase}&currency=${currencyBase}
+            // + &hotelImageHeight=${imgHBase}&hotelImageWidth=${imgWBase}&includeAffiliateResults=${inclAffilBase}
+            // + &includePromoIneligible=${inclPromoBase}&language=${langBase}&latitude=${latBase}&longitude=${longBase}
+            // + &placeId=${placeIdBase}&program=${rewardProgBase}&query=${queryBaseDesc}&rooms=${roomQtyBase}&sessionSiteSlug=${sssBase}
+            // + &source=${srcBase}&staticContentLevel=${statContLvlBase}` 
+    //     }).then(response => {
+    //         expect(response.status).to.eq(200);
+    //     });
     // });
- //});
