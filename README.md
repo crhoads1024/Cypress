@@ -2,6 +2,7 @@
 JavaScript automation framework
 
 This repo contains tests to validat the search feature of Rocketmiles.com works properly.
+
 To install:
  - open terminal or command prompt
  - type 'git clone https://github.com/crhoads1024/Cypress.git'
