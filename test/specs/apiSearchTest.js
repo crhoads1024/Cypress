@@ -26,7 +26,7 @@ const checkIn           = date
 const checkOut          = dateEnd;
 
 
-// const randInputCurr    = currencyList[floor(random() * currencyList.length)];
+const randInputCurr    = currencyList[floor(random() * currencyList.length)];
 // const randTestRewProg  = rewardProgramList[floor(random() * randTestRewProg.length)];
 // const randTestLang     = langList[floor(random() * langList.length)];
 // const randTestDest     = topDestList[floor(random() * topDestList.length)];
@@ -295,84 +295,40 @@ describe('Tests the Search Functions Of Rocketmiles.com ', () => {
                     expect(lowAvgTaxAndFeesAmt).to.not.eq(null);
                     expect(nightsBooked).to.not.eq(null);
                    
-                    // *** This section decides how, which way to assert the return values of the 
-                    // *** 'lowAvgTaxesAndFees' should be calculated and compared.
-                    // *** Taxes and fees value is returned by the API as only 2 decimal places
+                   
+                    // *** Taxes and fees as well as room rates value is returned by the API up to 2 decimal places
                     // *** However, some totalTaxFees calculations are truly using fractions of cents to arrive
-                    // *** at the total calculation.
-                    
-                    //*** Actual Low Avg Tax And Fees is obtained by reverse calculating the totalLowAvgTaxAndFeesAmt
-                    //*** Taking the value the API returns in totalTaxesAndFees and dividiing it by the 
-                    //*** number of nights for the booking will give the full NON-ROUNDED value of lowAvgTaxAndFeesAmt 
-                    
+                    // *** at the total calculation. 
                     // calculates actual values not represented in lowest listed priced (put this in a function at some point)
-                    //const actualLowPriceAmtUSD      = lowAvgPriceAmtUSD / nightsBooked;
-
-                    const actualLowPriceAmtUSD      = lowAvgPriceAmt/nightsBooked;
+                    const actualLowPriceAmtUSD      = totalPriceUsdAmt/nightsBooked;
                     const actualLowAvgTaxAndFeeAmt  = totalTaxesAndFeesAmt/nightsBooked;
-
-                    // Calculates actual value of foreign currency whole decimals or fractional cents and pulls the *** (forCurConvPriceAmt) ***
-                    // actualLowPriceAmtConverted = currencyConvert();
-                    // Splits and counts the decimal length of the actual prices
-                    // const actualLowPriceAmtConvertedSplit = actualLowPriceAmtConverted.toString().split('.');
-                    // const actualLowPriceAmtConvertedLength = actualLowPriceAmtConvertedlngthSplit[1].length;
-
-                    const actualLowPriceAmtUSDSplit = actualLowPriceAmtUSD.toString().split('.');
-                    const actualLowPriceAmtUSDlngth = actualLowPriceAmtUSDSplit[1].length;
-
-                    const taxAndFeesSplitLngth      = actualLowAvgTaxAndFeeAmt.toString().split('.');
-                    const taxAndFeesDecLngth        = taxAndFeesSplitLngth[1].length;
-
-
-                    // const currencyConvert = () => {
-
-                    //     forNCurrXchangeRate  = totalPriceAmt / totalPriceUsdAmt;
-                    //     actualLowPriceAmtConverted = forNCurrXchangeRate / nightsBooked;
-
-                    //     return actualLowPriceAmtConverted;
-                    // }
-
-
+                    const actualConvertedTotal      = totalPriceAmt/nightsBooked;
                     
-                    cy.log(`Actual Low Average Tax And Fee Amount Is ${actualLowAvgTaxAndFeeAmt}`);
-                    // || actualLowPriceAmtConvertedlngth
-                
-                if(taxAndFeesDecLngth || actualLowPriceAmtUSDlngth > 2){
-                    cy.log(`Validating taxes and price quoted are calulated accureately for ${hotelName} with ${currencyBase} 
-                    + for room quantity of ${roomQtyBase} booked for ${nightsBooked} nights with ${guestQtyBase} adults on search.`);
-                        expect(totalPriceUsdAmt).to.eq(actualLowPriceAmtUSD * nightsBooked);
-                        expect(totalTaxesAndFeesAmt).to.eq(actualLowAvgTaxAndFeeAmt * nightsBooked);
+                    if(randInputCurr != USD){
+                        expect(totalPriceAmt).to.eq(actualConvertedTotal * nightsBooked);
+
+                    }else{
+                    expect(actualLowPriceAmtUSD).to.eq(totalPriceUsdAmt * nightsBooked);
+                    expect(actualLowAvgTaxAndFeeAmt).to.eq(lowAvgTaxAndFeesAmt * nightsBooked);
                     
-                } 
-                else{
+                    }  // If currency USD condition
                     
-                    //*** This Block Executes For The lowAvgTaxAndFeesAmt values that contain WHOLE CENT VALUES */
-                    
-                    cy.log(`Validating taxes and price quoted are calulated accureately for ${hotelName} with ${currencyBase} 
-                    + for room quantity of ${roomQtyBase} booked for ${nightsBooked} nights with ${guestQtyBase} adults on search.`);
-                    expect(totalPriceUsdAmt).to.eq(lowAvgPriceAmt * nightsBooked);
-                    expect(totalPriceAmt).to.eq(lowAvgPriceAmt * nightsBooked); // lowAvgPriceAmt is the only thing that shows a foreign currencies value
-                    expect(totalTaxesAndFeesAmt).to.eq(lowAvgTaxAndFeesAmt * nightsBooked);
-                    
-                    }                  
                     // Exposing the affiliate(s) info
                     if (affiliatesIndex >= 1 ){
-                            let a = null;
-                                for(a = 0; a < affiliatesIndex; a += 1){
-                                    const affiliateSite = affiliate[a].url;
-                                    const affiliateSlug = affiliate[a].slug;
-                                    cy.log(`Afilliate Slug For ${hotelName} and Index[${i}] valiidated is ${affiliateSlug}`);
-                                    cy.log(`Afilliate Website For ${hotelName} and Index[${i}] valiidated is ${affiliateSite}`);
+                        let a = null;
+                            for(a = 0; a < affiliatesIndex; a += 1){
+                                const affiliateSite = affiliate[a].url;
+                                const affiliateSlug = affiliate[a].slug;
+                                cy.log(`Afilliate Slug For ${hotelName} and Index[${i}] valiidated is ${affiliateSlug}`);
+                                cy.log(`Afilliate Website For ${hotelName} and Index[${i}] valiidated is ${affiliateSite}`);
 
-                                    expect(affiliateSlug && affiliateSite).to.includes(`booking`);
-                                }
+                                expect(affiliateSlug && affiliateSite).to.includes(`booking`);
+                            }
                     }else{
-                            cy.log('No Affiliates Listed For Property.')
-                        }
-                        // Once currency conversion rates are accurately establiished
-                    // THIS WILL NEED (totalPriceAmt).to.eq(lowAvgPriceAmt * nightsBooked * conversionCalc); multiplied by the conversion rate to the USD
-                    // 'totalPriceUSD' always shows the USD amt 
-                
+                        cy.log('No Affiliates Listed For Property.')
+                    }
+    
+                    
                 
                 } //For loop
                         
