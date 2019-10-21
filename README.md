@@ -18,9 +18,7 @@ To install:
  - type 
  "npm i"
  
-  - type 
- "npm install cypress"
-
+  
 To run:
  - change diretory to 'Cypress' git project folder
  - type "npm i cypress"
