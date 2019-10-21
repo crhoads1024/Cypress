@@ -13,7 +13,7 @@ Be aware there are no UI tests other than some base setup tests to facilitate de
 
 This code that runs validates the positive routes for the baseInputs, an alternate inputCurrency, an alternate roomQty, and an alernate guestQty.
 
-This code takes a but run so please be patient. 
+This code takes a bit run so please be patient. 
 My last execution of this code took 647.71 seconds to run or around 11 mins.
 
 Enjoy!
