@@ -2,7 +2,7 @@
 
 //  API Target Site: Rocketmiles.com //
 //  ***Search Function Validation***
-//  ******* POSITIVE TESTS *******   //
+//  ******* API TESTS *******   //
 
 const { floor }  = Math;
 const { random } = Math;
@@ -54,7 +54,7 @@ function randomCurrencyPicker() {
     return randomInputCurr;
 }
 
-describe('Tests the Search Functions Of Rocketmiles.com ', () => {
+describe('API tests for the Search Functions Of Rocketmiles.com ', () => {
    
 
 
@@ -490,7 +490,7 @@ it('Tests the Search Feature With Defaults Via API, Validates basic function of 
                         expect(response.body.results[i].hotel.address.city).to.not.eq(null);
                         expect(response.body.results[i].hotel.name).to.not.eq(null); 
                         expect(response.body.results[i].hotel.id).to.not.eq(null);  
-                        expect(response.body.results[i].totalPriceUSD.currency).to.eq('RUB');
+                        expect(response.body.results[i].totalPriceUSD.currency).to.eq('USD');
                         expect(response.body.results[i].totalPrice.currency).to.eq(inputCurr);
                         expect(response.body.results[i].totalTaxesAndFees.currency).to.eq(inputCurr);
                         expect(response.body.results[i].lowestAveragePrice.currency).to.eq(inputCurr);
