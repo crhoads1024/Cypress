@@ -24,7 +24,7 @@ To install the git framework on your machine, follow the instructions for your m
 https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
 
-Homework assignment rocketmiles.com
+Target URI - www.rocketmiles.com
 
 To install:
  - open terminal or command prompt
