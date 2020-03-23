@@ -40,4 +40,4 @@ To run:
  "npm test"
  - From the Cypress test runner you can run the integration test file by clicking individually or click "Run all specs"
  
-
+If these steps no longer work, please let me know.
